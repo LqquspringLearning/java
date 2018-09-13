@@ -2,13 +2,13 @@ package com.cultivation.javaBasic.util;
 
 public class AnimeCharacter {
     private final String name;
-
+    private final String time;
     public AnimeCharacter(String name) {
         if (name == null) throw new IllegalArgumentException("Name is mandatory.");
         this.name = name;
+        this.time="";
     }
 
-    @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (obj == this) return true;

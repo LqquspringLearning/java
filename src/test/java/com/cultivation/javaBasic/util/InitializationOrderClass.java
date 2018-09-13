@@ -7,6 +7,9 @@ import java.util.List;
 public class InitializationOrderClass {
     private static List<String> logger = new ArrayList<>();
 
+    static  {
+        logger.add("Initialization Block1");
+    }
     public static void resetLogs() {
         logger.clear();
     }
@@ -14,7 +17,6 @@ public class InitializationOrderClass {
     public static String[] getLogs() {
         return logger.toArray(new String[0]);
     }
-
     private final Object field = initField();
 
     private Object initField() {

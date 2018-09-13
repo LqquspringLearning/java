@@ -1,8 +1,9 @@
 package com.cultivation.javaBasic.showYourIntelligence;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 public class DistinctIterable<T> implements Iterable<T> {
     private Iterable<T> iterable;
@@ -18,7 +19,10 @@ public class DistinctIterable<T> implements Iterable<T> {
 
     public List<T> toList() {
         ArrayList<T> result = new ArrayList<>();
-        this.forEach(result::add);
+        for (Iterator<T> iterator = this.iterator(); iterator.hasNext(); ) {
+            T t = iterator.next();
+            result.add(t);
+        }
         return result;
     }
 }
@@ -29,18 +33,33 @@ class DistinctIterator<E> implements Iterator<E> {
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private final Iterator<E> iterator;
 
+    private List<E> containsList;
+
     DistinctIterator(Iterator<E> iterator) {
+        containsList = new ArrayList<>();
         this.iterator = iterator;
     }
 
     @Override
     public boolean hasNext() {
-        throw new NotImplementedException();
+        if (!iterator.hasNext()) return false;
+        E curElem = null;
+        boolean hasFound = false;
+        while (iterator.hasNext()) {
+            curElem = iterator.next();
+            if (containsList.size() == 0 || !containsList.contains(curElem)) {
+                containsList.add(curElem);
+                hasFound = true;
+                break;
+            }
+        }
+        return hasFound;
     }
 
     @Override
     public E next() {
-        throw new NotImplementedException();
+        if (!iterator.hasNext()) throw new NoSuchElementException();
+        return iterator.next();
     }
     // --end->
 }

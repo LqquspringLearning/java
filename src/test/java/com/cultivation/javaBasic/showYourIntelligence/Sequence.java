@@ -1,15 +1,16 @@
 package com.cultivation.javaBasic.showYourIntelligence;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class Sequence implements Iterable<Integer> {
     private final Integer start;
     private final Integer end;
 
     public Sequence(Integer start, Integer end) {
-        if (start >= end) { throw new IllegalArgumentException("Start must be smaller than End."); }
+        if (start >= end) {
+            throw new IllegalArgumentException("Start must be smaller than End.");
+        }
         this.start = start;
         this.end = end;
     }
@@ -21,15 +22,20 @@ public class Sequence implements Iterable<Integer> {
 }
 
 class SequenceIterator implements Iterator<Integer> {
+
     // TODO: You can add additional fields or methods if you want.
     // <--start
-
+    private Integer[] squene;
+    private Integer curPosition = -1;
     // --end-->
 
     SequenceIterator(Integer start, Integer end) {
         // TODO: please implements the following code to pass the test
         // <--start
-        throw new NotImplementedException();
+        squene = new Integer[end - start];
+        for (int index = start, i = 0; index < end; index++, i++) {
+            squene[i] = index;
+        }
         // --end-->
     }
 
@@ -37,7 +43,7 @@ class SequenceIterator implements Iterator<Integer> {
     public boolean hasNext() {
         // TODO: please implements the following code to pass the test
         // <--start
-        throw new NotImplementedException();
+        return curPosition + 1 < squene.length;
         // --end-->
     }
 
@@ -45,7 +51,9 @@ class SequenceIterator implements Iterator<Integer> {
     public Integer next() {
         // TODO: please implements the following code to pass the test
         // <--start
-        throw new NotImplementedException();
+        if (!hasNext()) throw new NoSuchElementException();
+        curPosition = curPosition + 1;
+        return squene[curPosition];
         // --end-->
     }
 }

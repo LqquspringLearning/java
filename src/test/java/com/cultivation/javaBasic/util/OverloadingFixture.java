@@ -10,6 +10,10 @@ public class OverloadingFixture {
         return "methodWithOneParameter(Object)";
     }
 
+    public String methodWithTwoParameters(String string, int integer) {
+        return "methodWithTwoParameters(String, int)";
+    }
+
     public String methodWithTwoParameters(String string, Integer integer) {
         return "methodWithTwoParameters(String, Integer)";
     }

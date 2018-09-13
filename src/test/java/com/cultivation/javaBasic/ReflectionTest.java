@@ -1,8 +1,14 @@
 package com.cultivation.javaBasic;
 
 import com.cultivation.javaBasic.util.Employee;
-import com.cultivation.javaBasic.util.MethodWithAnnotation;
 import org.junit.jupiter.api.Test;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +21,7 @@ class ReflectionTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final Class<? extends Employee> expected = null;
+        final Class<? extends Employee> expected = Employee.class;
         // --end-->
 
         assertEquals(expected, employeeClass);
@@ -28,7 +34,7 @@ class ReflectionTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final String expected = null;
+        final String expected = "com.cultivation.javaBasic.util.Employee";
         // --end-->
 
         assertEquals(expected, employeeClass.getName());
@@ -41,7 +47,7 @@ class ReflectionTest {
 
         // TODO: please created an instance described by `theClass`
         // <--start
-        Employee instance = null;
+        Employee instance =(Employee)theClass.newInstance();
         // --end-->
 
         assertEquals("Employee", instance.getTitle());
@@ -54,14 +60,30 @@ class ReflectionTest {
 
         // TODO: please get all public static declared methods of Double. Sorted in an ascending order
         // <--start
-        String[] publicStaticMethods = null;
+        List<String> arrays = new ArrayList<>();
+        String[] array = Arrays.stream(doubleClass.getDeclaredMethods())
+                .filter(m->Modifier.isStatic(m.getModifiers()) && Modifier.isPublic(m.getModifiers()))
+                .map(Method::getName).toArray(String[]::new);
+
+        Method[] methods = doubleClass.getDeclaredMethods();
+        for (Method method : methods) {
+            if (Modifier.isPublic(method.getModifiers()) && Modifier.isStatic(method.getModifiers())) {
+                arrays.add(method.getName());
+            }
+        }
+
+        String[] publicStaticMethods = arrays.toArray(new String[0]);
+
+
+
+        Arrays.sort(publicStaticMethods);
         // --end-->
 
         final String[] expected = {
-            "compare", "doubleToLongBits", "doubleToRawLongBits", "hashCode",
-            "isFinite", "isInfinite", "isNaN", "longBitsToDouble", "max",
-            "min", "parseDouble", "sum", "toHexString", "toString", "valueOf",
-            "valueOf"
+                "compare", "doubleToLongBits", "doubleToRawLongBits", "hashCode",
+                "isFinite", "isInfinite", "isNaN", "longBitsToDouble", "max",
+                "min", "parseDouble", "sum", "toHexString", "toString", "valueOf",
+                "valueOf"
         };
 
         assertArrayEquals(expected, publicStaticMethods);
@@ -74,7 +96,7 @@ class ReflectionTest {
 
         // TODO: please get the value of `getTitle` method using reflection. No casting to Employee is allowed.
         // <--start
-        Object result = null;
+        Object result = employee.getClass().getMethod("getTitle").invoke(employee);
         // --end-->
 
         assertEquals("Employee", result);
@@ -87,7 +109,8 @@ class ReflectionTest {
 
         // TODO: please get the class of array item `employees`
         // <--start
-        Class<?> itemClass = null;
+
+        Class<?> itemClass = employees.getClass().getComponentType();
         // --end-->
 
         assertEquals(Employee.class, itemClass);
@@ -96,15 +119,22 @@ class ReflectionTest {
     @SuppressWarnings({"ConstantConditions", "unused"})
     @Test
     void should_be_able_to_get_the_methods_who_contains_MyAnnotation_annotation() {
-        Class<MethodWithAnnotation> theClass = MethodWithAnnotation.class;
-
-        // TODO: please get the methods who contains MyAnnotation annotation.
-        // <--start
-        String[] methodsContainsAnnotations = null;
-        // --end-->
-
-        assertArrayEquals(new String[] {"theMethod"}, methodsContainsAnnotations);
+        Class<?> myclassType = MyClass.class;
+        Method[] methods = myclassType.getDeclaredMethods();
+        List<String> annatationsList = new ArrayList<>();
+        for (Method method : methods) {
+            Annotation[] annotations = method.getAnnotations();
+            for (Annotation annotation : annotations) {
+                if (annotation.annotationType() == TestAnnotation.class) {
+                    annatationsList.add(method.getName());
+                }
+            }
+        }
+        String[] results = annatationsList.toArray(new String[0]);
+        assertArrayEquals(new String[]{"GetMethods"}, results);
     }
+
+
 }
 
 /*

@@ -10,11 +10,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class LambdaTest {
     @Test
     void should_apply_to_interface_with_single_abstract_method() {
-        StringFunc lambda = () -> "Hello";
+        StringFunc lambda = new StringFunc() {
+
+            public String getString() {
+                return "Hello";
+            }
+        }; // () -> "Hello";
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final String expect = null;
+        final String expect = "Hello";
         // --end-->
 
         assertEquals(expect, lambda.getString());
@@ -25,7 +30,7 @@ class LambdaTest {
     void should_be_able_to_bind_to_instance_method() {
         // TODO: please bind lambda to instanceMethod.
         // <--start
-        StringFunc lambda = null;
+        StringFunc lambda = () -> instanceMethod();
         // --end-->
 
         assertEquals("instanceMethod", lambda.getString());
@@ -36,7 +41,7 @@ class LambdaTest {
     void should_be_able_to_bind_to_static_method() {
         // TODO: please bind lambda to staticMethod
         // <--start
-        StringFunc lambda = null;
+        StringFunc lambda = LambdaTest::staticMethod;
         // --end-->
 
         assertEquals("staticMethod", lambda.getString());
@@ -47,7 +52,7 @@ class LambdaTest {
     void should_bind_to_constructor() {
         // TODO: please bind lambda to constructor of ArrayList<Integer>
         // <--start
-        GenericFunc<ArrayList<Integer>> lambda = null;
+        GenericFunc<ArrayList<Integer>> lambda = () -> new ArrayList<>();
         // --end-->
 
         ArrayList<Integer> value = lambda.getValue();
@@ -59,13 +64,19 @@ class LambdaTest {
     void should_capture_variable_in_a_closure() {
         int captured = 5;
 
-        StringFunc lambda = () -> captured + " has been captured.";
+        StringFunc lambda = new StringFunc() {
+            @Override
+            public String getString() {
+                return captured + " has been captured.";
+            }
+        };
 
         final String message = lambda.getString();
-
+        String st = "";
+         st.equals("");
         // TODO: please modify the following code to pass the test
         // <--start
-        final String expected = null;
+        final String expected = "5 has been captured.";
         // --end-->
 
         assertEquals(expected, message);
@@ -73,6 +84,7 @@ class LambdaTest {
 
     @Test
     void should_evaluate_captured_variable_when_executing() {
+
         ValueHolder<String> value = new ValueHolder<>();
         value.setValue("I am the King of the world!");
 
@@ -80,7 +92,8 @@ class LambdaTest {
 
         // TODO: please write down the expected string directly.
         // <--start
-        final String expected = null;
+        //lambda 是Lazy load 的
+        final String expected = "The length of captured value is: 4";
         // --end-->
 
         value.setValue("Blah");
@@ -94,20 +107,20 @@ class LambdaTest {
 
         // TODO: please write down the expected string directly.
         // <--start
-        final String expected = null;
+        final String expected = "In the year 2019";
         // --end-->
 
         assertEquals(expected, message);
     }
 
     @Test
-    void should_capture_this_variable() {
+    void should_capture_this_variable() {//lambda variable scopr from define expand to
         ThisInClosure instance = new ThisInClosure();
         StringFunc stringFunc = instance.getLambda();
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final String expected = null;
+        final String expected = "ThisInClosure";
         // --end-->
 
         assertEquals(expected, stringFunc.getString());

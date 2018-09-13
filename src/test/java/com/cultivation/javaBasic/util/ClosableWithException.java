@@ -12,7 +12,7 @@ public class ClosableWithException implements AutoCloseable {
     @Override
     public void close() {
         logger.add("ClosableWithException.close");
-        throw new IllegalArgumentException("Oh god!");
+       // throw new IllegalArgumentException("Oh god!");
     }
 
 }

@@ -5,4 +5,5 @@ public class NestedDerivedClassWithName extends DerivedFromBaseClassWithName {
     public String getName() {
         return "NestedDerivedClassWithName";
     }
+
 }
